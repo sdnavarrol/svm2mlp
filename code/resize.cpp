@@ -27,17 +27,23 @@ int main( int argc, char** argv )
     {
       imageName = argv[1];
   	}
+
+  	vector<int> compression_params;
+  	compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
+    compression_params.push_back(9);
+	
 	for (i=0;i<25;i++){
 		string fileName = "../images/a/" + to_string(i) + ".png";
-		string newFileName = "mod" + to_string(i) + ".png";
 		src = imread(fileName,IMREAD_COLOR);
 		if(src.empty()){return -1;}
+		string newFileName = "output/gray/" + to_string(i) + "_gray.png";
         cvtColor( src, src_gray, COLOR_BGR2GRAY ); // Convert the image to Gray
+       	imwrite(newFileName, dst, compression_params);
+   		newFileName = "output/threshold/" + to_string(i) + "_threshold.png";
         threshold( src_gray, src_thr, threshold_value, max_BINARY_value,threshold_type );
+	   	imwrite(newFileName, dst, compression_params);
+   		newFileName = "output/resize/" + to_string(i) + "_sized.png";
 		resize(src_thr,dst,dst.size(),70,70,0);
-		vector<int> compression_params;
-    	compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-    	compression_params.push_back(9);
     	imwrite(newFileName, dst, compression_params);
     }
     return 0;
