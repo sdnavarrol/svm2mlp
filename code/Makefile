@@ -1,10 +1,10 @@
 LIBS=-lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui
 
 
-all: clean threshold blur
+all: threshold  resize
 
 clean:
-	rm threshold blur
+	rm threshold blur *.png
 
 threshold: threshold.cpp
 	g++ threshold.cpp $(LIBS) -o threshold
@@ -13,3 +13,5 @@ threshold: threshold.cpp
 blur: blur.cpp
 	g++ blur.cpp $(LIBS) -o blur
 
+resize: resize.cpp
+	g++ resize.cpp $(LIBS) -o resize
