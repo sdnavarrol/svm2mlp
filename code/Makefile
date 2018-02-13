@@ -15,3 +15,9 @@ blur: blur.cpp
 
 resize: resize.cpp
 	g++ resize.cpp $(LIBS) -o resize
+
+displayInfo: displayInfo.cpp
+	g++ displayInfo.cpp $(LIBS) -o displayInfo
+
+zoneOrigin: zoneOrigin.cpp
+	g++ zoneOrigin.cpp -o zoneOrigin

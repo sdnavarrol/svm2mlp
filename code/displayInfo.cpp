@@ -19,7 +19,7 @@ int const max_value = 255;
 int const max_type = 4;
 int const max_BINARY_value = 255;
 
-int i,j;
+int i,j,m,n;
 
 int main( int argc, char** argv )
 {
@@ -28,12 +28,7 @@ int main( int argc, char** argv )
     {
       imageName = argv[1];
   	}
-
-  	vector<int> compression_params;
-  	compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-    compression_params.push_back(9);
-	
-	for (i=0;i<1;i++){
+  	for (i=0;i<1;i++){
 		string fileName = "../images/a/" + to_string(i) + ".png";
 		src = imread(fileName,IMREAD_COLOR);
 		if(src.empty()){return -1;}
@@ -42,10 +37,24 @@ int main( int argc, char** argv )
        	//imwrite(newFileName, src_gray, compression_params);
   		//newFileName = "../images/a/" + to_string(i) + "_threshold.png";
      	threshold( src_gray, src_thr, 124, max_BINARY_value,0);
-		//imwrite(newFileName, src_thr, compression_params);
-       	//newFileName = "../images/a/" + to_string(i) + "_sized.png";
-		//resize(src_thr,dst,dst.size(),70,70,0);
-    	imwrite(newFileName, src_thr, compression_params);
+      //cout << "Channels:"<<src_thr.channels();
+      int pixelCount=0;
+      int cols, rows;
+      cols = src_thr.cols;
+      rows = src_thr.rows;
+      cout << "Columns = " << cols << endl;
+      cout << "Rows = "<< rows <<endl;
+     	for(m=0;m<cols;m++){
+     		for(n=0;n<rows;n++){
+	     		Scalar intensity = src_thr.at<uchar>(m,n);
+          if(intensity.val[0] == 255){
+            pixelCount++;
+          }
+	     		//cout << "intensity = " << endl <<""<<endl<<intensity.val[0]<<endl<<endl;]
+     		}
+     	}
+      cout << "Numero de pixeles pretos = "<< pixelCount << endl;
+
     }
-    return 0;
+    return 0;    
 }
