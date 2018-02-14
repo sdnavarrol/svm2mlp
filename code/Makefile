@@ -21,3 +21,8 @@ displayInfo: displayInfo.cpp
 
 zoneOrigin: zoneOrigin.cpp
 	g++ zoneOrigin.cpp -o zoneOrigin
+
+populateOrigin: populateOrigin.cpp
+	g++ populateOrigin.cpp -o populateOrigin
+zone: zone.cpp
+	g++  $(LIBS) zone.cpp -o zone
