@@ -18,14 +18,17 @@ int zoneOrigins(int cols, int rows, int div){
 			for(n=0;n<rows;n++){
 				originsVector[i][1]=rows;
 			}
-
 		}
-
-
-
 	}
 	//cout << zonesTotal <<endl;
 }
+
+void calculateOrigins(){
+	int m,n;
+
+
+
+};
 
 int main(void){
 	zoneOrigins(50,50,5);
