@@ -1,5 +1,7 @@
 #include <iostream>
 #include <math.h>
+#include <fstream>
+
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -17,12 +19,12 @@ class Zone {
 	double iczhdd[10];
 	public:
 		void set_values(int,int);
-		void defineZone(int,int);
-		void comp_iczvdd(int,int,Mat);
-		void comp_iczhdd(int,int,Mat);
+		void defineZone(int,int,ofstream&);
+		void comp_iczvdd(int,int,Mat,ofstream&);
+		void comp_iczhdd(int,int,Mat,ofstream&);
 };
 
-void Zone::comp_iczvdd(int centroid_x, int centroid_y, Mat src){
+void Zone::comp_iczvdd(int centroid_x, int centroid_y, Mat src,ofstream& myfile){
 	int i,j;
 	int count_positive=0;
 	double distance=0.00;
@@ -36,18 +38,15 @@ void Zone::comp_iczvdd(int centroid_x, int centroid_y, Mat src){
 
 		}
 		if(count_positive==0){
-			iczhdd[i-lx] = 0;
+			iczvdd[i-lx] = 0;
 		}else{
 			iczvdd[i-lx] = distance/count_positive;
 		}
-
-		cout<<"ICZVDD ["<< i-lx <<"] = "<< iczvdd[i-lx] <<endl;
+		myfile<<"ICZVDD["<<i-lx<<"]="<<iczvdd[i-lx]<<endl;
 	}
-
-
 }
 
-void Zone::comp_iczhdd(int centroid_x, int centroid_y, Mat src){
+void Zone::comp_iczhdd(int centroid_x, int centroid_y, Mat src,ofstream& myfile){
 	int i,j;
 	int count_positive=0;
 	double distance=0;
@@ -60,37 +59,35 @@ void Zone::comp_iczhdd(int centroid_x, int centroid_y, Mat src){
 			}
 
 		}
-		//cout << "255 value pixels =" <<count_positive<<endl;
-		if(count_positive!=0){
+		if(count_positive==0){
 			iczhdd[j-ly] = 0;
 		}else{
 			iczhdd[j-ly] = distance/count_positive;
 		}
-		cout<<"ICZHDD ["<< j-ly <<"] = "<< iczhdd[j-ly-lx] <<endl;
-//		cout << "Features Horizontal " << iczhdd[j-ly] <<endl;
+		myfile<<"ICZHDD["<<j-ly<<"]="<<iczhdd[j-ly]<<endl;
 	}
 
 
 }
 
-void Zone::defineZone(int m, int n){
+void Zone::defineZone(int m, int n,ofstream& myfile){
 	col_index = n;
 	row_index = m;
 
 	if(m==0 && n==0){
 		lx=0;
 		ly=0;
-		ux=9;
-		uy=9;
+		ux=10;
+		uy=10;
 	}else if(m==0){
 		lx=10*n-1;
 		ly=0;
 		ux=lx+10;
-		uy=9;
+		uy=10;
 	}else if(n==0){
 		lx=0;
 		ly=10*m-1;
-		ux=9;
+		ux=10;
 		uy=ly+10;
 	}else{
 		lx=10*n-1;
@@ -99,39 +96,46 @@ void Zone::defineZone(int m, int n){
 		uy=ly+10;
 
 	}
-	//ux = lx+10;
-	//uy = ly+10;
-	cout <<endl<< "Zone"<<"("<< m<<","<< n<<")" <<endl; 
-	cout <<"------------ "<<endl;
-	cout <<lx << " "<< ly << " " << ux << " " << uy << " " << endl;
-
+	myfile << "Zone"<<"("<< m<<","<< n<<")" <<endl; 
 }
 
 
 
 int main (int argc , char** argv){
-
 	Zone foo[5][5];
 	Mat src, src_gray, src_thr;
 	int i,j;
-	String fileName("../images/a/0.png"); // by default
+	int png_file;
+	ofstream iczvdd_file, zones_file, iczhdd_file;
+	iczvdd_file.open("iczvdd.txt");
+	iczhdd_file.open("iczhdd.txt");
+	zones_file.open("all.txt");
+	String fileName("../../images/a/0.png"); // by default
  	 if (argc > 1)
     {
       fileName = argv[1];
   	}
-
-	src = imread(fileName,IMREAD_COLOR);
-	cvtColor( src, src_gray, COLOR_BGR2GRAY ); // Convert the image to Gray
-	threshold( src_gray, src_thr, 124, 255,0);
-	for(i=0;i<5;i++){
-		for(j=0;j<5;j++){
-			foo[i][j].defineZone(i,j);
-			foo[i][j].comp_iczvdd(25,25,src_thr);
-			foo[i][j].comp_iczhdd(25,25,src_thr);
+  	//For loop extracting features from 5 classes.
+  	/***
+  	****/
+  	//For all files in dir loop here
+  	for(png_file=0;png_file<36;png_file++){
+  		fileName = "../../images/a/"+to_string(png_file)+".png";
+  		cout << "Processing file: " << fileName <<endl;
+		src = imread(fileName,IMREAD_COLOR);
+		cvtColor( src, src_gray, COLOR_BGR2GRAY ); // Convert the image to Gray
+		threshold( src_gray, src_thr, 124, 255,0);
+		for(i=0;i<5;i++){
+			for(j=0;j<5;j++){
+				foo[i][j].defineZone(i,j,zones_file);
+				foo[i][j].comp_iczvdd(25,25,src_thr,iczvdd_file);
+				foo[i][j].comp_iczhdd(25,25,src_thr,iczhdd_file);
+			}
 		}
 	}
-	
-//	cout << "area = " << foo.area();
+	iczhdd_file.close();
+	iczvdd_file.close();
+	zones_file.close();
 	return 0;
 }
 
