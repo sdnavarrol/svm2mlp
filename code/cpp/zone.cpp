@@ -15,8 +15,8 @@ class Zone {
 	int uy;
 	int col_index;
 	int row_index;
-	double iczvdd[10];
-	double iczhdd[10];
+	public: double iczvdd[10];
+	public: double iczhdd[10];
 	public:
 		void set_values(int,int);
 		void defineZone(int,int,ofstream&);
@@ -104,12 +104,14 @@ void Zone::defineZone(int m, int n,ofstream& myfile){
 int main (int argc , char** argv){
 	Zone foo[5][5];
 	Mat src, src_gray, src_thr;
-	int i,j;
+	int i,j,k;
 	int png_file;
-	ofstream iczvdd_file, zones_file, iczhdd_file;
+	ofstream iczvdd_file, zones_file, iczhdd_file,data_file;
+	//Instead passing file pointer, use vector and concatenate later.
 	iczvdd_file.open("iczvdd.txt");
 	iczhdd_file.open("iczhdd.txt");
 	zones_file.open("all.txt");
+	data_file.open("data.csv");
 	String fileName("../../images/a/0.png"); // by default
  	 if (argc > 1)
     {
@@ -119,9 +121,11 @@ int main (int argc , char** argv){
   	/***
   	****/
   	//For all files in dir loop here
-  	for(png_file=0;png_file<36;png_file++){
+	data_file<<"Label"<<","<<"Zone"<<","<<"iczhdd"<<","<<"iczvdd"<<";"<<endl;		
+  	for(png_file=0;png_file<1;png_file++){
+  		char label='a';
   		fileName = "../../images/a/"+to_string(png_file)+".png";
-  		cout << "Processing file: " << fileName <<endl;
+  		cout << "Processing fle: " << fileName <<endl;
 		src = imread(fileName,IMREAD_COLOR);
 		cvtColor( src, src_gray, COLOR_BGR2GRAY ); // Convert the image to Gray
 		threshold( src_gray, src_thr, 124, 255,0);
@@ -132,10 +136,19 @@ int main (int argc , char** argv){
 				foo[i][j].comp_iczhdd(25,25,src_thr,iczhdd_file);
 			}
 		}
+		for(i=0;i<5;i++){
+			for(j=0;j<5;j++){
+				for(k=0;k<10;k++){
+					data_file<<label<<","<<5*i+j+1<<","<<foo[i][j].iczhdd[k]<<","<<foo[i][j].iczvdd[k]<<";"<<endl;		
+				}
+				
+			}
+		}
 	}
-	iczhdd_file.close();
-	iczvdd_file.close();
-	zones_file.close();
+//	iczhdd_file.close();
+//	iczvdd_file.close();
+//	zones_file.close();
+	data_file.close();
 	return 0;
 }
 
