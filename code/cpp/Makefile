@@ -25,6 +25,5 @@ zoneOrigin: zoneOrigin.cpp
 populateOrigin: populateOrigin.cpp
 	g++ populateOrigin.cpp -o populateOrigin
 zone: zone.cpp
-	rm data.csv
 	g++  $(LIBS) zone.cpp -o zone
 	./zone
