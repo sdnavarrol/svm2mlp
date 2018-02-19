@@ -28,6 +28,3 @@ zone: zone.cpp
 	g++  $(LIBS) -c zone.cpp -o zone.o
 main: zone.o main.cpp
 	g++  $(LIBS) zone.o main.cpp -o main
-	./main
-	cp data.csv ../libsvm/
-

@@ -433,7 +433,7 @@
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-Este documento contem a proposta de trabalho de pesquisa da disciplina do programa de Pós-Graduação em Engenharia Elétrica UFBA, Inteligência computacional. 
+Este documento contem o desenvolimento de trabalho de pesquisa da disciplina do programa de Pós-Graduação em Engenharia Elétrica UFBA, Inteligência computacional. 
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -489,20 +489,17 @@ Desses arquivo de imagem em alta resolução e de outras fontes existentes e com
 O fluxo proposto para avaliação da técnica de reconhecimento de caracteres esta composta das seguintes processos, tomando como base o proposto por \cite{halder2012comparison}, \cite{singh2015application}:
 
 \begin{itemize}
-  \item Pré-processamento
-  \item Segmentação
+  \item Pré-processamento e Segmentação
   \item Extração
   \item Classificação.
 \end{itemize}
 
 
-\section{Pré-processamento}
+\section{Pré-processamento e Segmentação}
 
 As imagens dos documentos que foram digitalizados contem níveis apreciáveis de ruido. O pré-processamento é realizado para diminuir esse níveis de interferência. Nessa etapa serão usadas API de bibliotecas para tratamentos e transformação de imagens para realizar filtrado, dilatação, erosão, redimensionamento, etc \cite{singh2015application}.
 
-\section{Segmentação}
-
-Em esta etapa uma sequência de caracteres de uma imagem é particionada em varias imagens de caracteres individuais. Também é necessário normalizar o tamanho da imagem para ajustá-lo ao template de classificação e determinar a posição do carácter na imagem digital \cite{singh2015application}. Podem-se apresentar algumas dificuldades de segmentação devido a natureza do manuscrita dos documentos da época.
+As imagens fonte estão almacenadas em formato JPG 3464x4879. Para criar o conjunto de datos para treinamento e test foram extraidas manualmente imagens dos caracteres {a,e}. Usou-se o aplicativo GIMP, usando a ferramente seleção libre os caracteres escolhidos foram contrados e colados em uma nova imagen de 50x50 pixeles. O dimensionamento das imagenes de entrada para os classificadores foi determinado em razão da generalização de algoritmos es por evidencia encontrada em ref e ref.
 
 
 \section{Extração}
@@ -511,9 +508,11 @@ O objetivo da extração e capturar as características essenciais dos simbolos.
 Existem vários métodos avaliados anteriormente e no presente trabalho serão trabalhados os seguintes mecanismos de extração:
 
 \begin{itemize}
-  \item Multifactor Dimensionality Reduction
-  \item Principal Components Analysis
+  \item Normalized Distance Vector Mean
 \end{itemize}
+
+
+
 
 \section{Classificação}
 
